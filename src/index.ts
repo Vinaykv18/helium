@@ -2,8 +2,10 @@ import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
 import * as os from 'os';
 
-
 const app = new Hono()
+
+// Variable to store the number (in-memory storage)
+let storedNumber: number | null = null;
 
 // Root endpoint that returns a random number
 app.get('/', (c) => {
@@ -24,14 +26,31 @@ app.get('/current-date', (c) => {
 })
 
 // Endpoint to return the current environment (OS type)
-// app.get('/environment', (c) => {
-//   const osType = os.platform() // 'win32', 'linux', 'darwin' (macOS), etc.
-//   return c.json({ osType }, 200)
-// })
-
 app.get('/environment', (c) => {
   const osType = process.platform;
   return c.json({ osType }, 200);
+})
+
+// New POST endpoint to accept and store the number
+app.post('/send-number', async (c) => {
+  const body = await c.req.json(); // Parse the JSON body
+  const { number } = body; // Extract the 'number' from the body
+
+  if (typeof number === 'number') {
+    storedNumber = number; // Store the number
+    return c.json({ receivedNumber: number }, 200); // Return the same number
+  } else {
+    return c.json({ error: 'Please provide a valid number.' }, 400); // Error if no valid number
+  }
+})
+
+// New GET endpoint to retrieve the stored number
+app.get('/get-number', (c) => {
+  if (storedNumber !== null) {
+    return c.json({ storedNumber }, 200); // Return the stored number
+  } else {
+    return c.json({ error: 'No number has been sent yet.' }, 404); // If no number is stored
+  }
 })
 
 // Start the server
