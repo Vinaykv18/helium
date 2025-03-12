@@ -5,15 +5,19 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "tsx src/index.ts"
+    "start": "tsx src/index3.ts"
   },
   "author": "vinay",
   "license": "ISC",
   "type": "module",
   "devDependencies": {
     "@types/node": "^20.11.17",
+    "@types/readline-sync": "^1.4.8",
     "ts-node": "^10.9.2",
     "tsx": "^4.7.1",
     "typescript": "^5.8.2"
+  },
+  "dependencies": {
+    "readline-sync": "^1.4.10"
   }
 }
