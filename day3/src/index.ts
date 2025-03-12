@@ -103,8 +103,12 @@ function mainMenu(): void {
                 rl.question("Enter Movie ID: ", (id) => {
                     try {
                         movieManager.removeMovie(id);
-                    } catch (error) {
-                        console.error("Error:", error.message);
+                    } catch (error: unknown) {
+                        if (error instanceof Error) {
+                            console.error("Error:", error.message);
+                        } else {
+                            console.error("Unknown error occurred while removing the movie.");
+                        }
                     }
                     mainMenu();
                 });
